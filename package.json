@@ -9,6 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
+    "format": "prettier --write \"**/*.{js,ts,json,jsx,tsx,css,less,scss,vue,html}\"",
     "lint": "expo lint"
   },
   "jest": {
@@ -49,6 +50,16 @@
     "jest-expo": "~51.0.3",
     "react-test-renderer": "18.2.0",
     "typescript": "~5.3.3"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest",
+      "plugin:prettier/recommended"
+    ],
+    "rules": {
+      "react/style-prop-object": "off"
+    }
   },
   "private": true
 }
