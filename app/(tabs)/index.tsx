@@ -28,6 +28,12 @@ const HomeScreen: React.FC<Props> = () => {
         <Link className="w-100 p-2" href="/learn/05-switch_statusbar">
           Switch Status
         </Link>
+        <Link className="w-100 p-2" href="/learn/06-activity_indicator">
+          ActivityIndicator
+        </Link>
+        <Link className="w-100 p-2" href="/learn/07-image">
+          Image
+        </Link>
       </ScrollView>
     </View>
   );
