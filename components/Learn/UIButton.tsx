@@ -6,12 +6,18 @@ interface Props {
   className?: string;
   onPress?: () => void;
 }
-const UIButton: React.FC<Props> = ({ title, className, onPress }) => {
+const UIButton: React.FC<Props> = ({
+  title,
+  className = "bg-blue-400 text-white",
+  onPress,
+}) => {
   return (
     <TouchableOpacity
-      className={`rounded-lg px-5 py-3 ${className}`}
+      className={`w-full rounded-lg px-5 py-3 ${className}`}
       onPress={onPress}>
-      <Text className={`text-base ${className}`}>{title}</Text>
+      <Text className={`text-center align-middle text-base ${className}`}>
+        {title}
+      </Text>
     </TouchableOpacity>
   );
 };

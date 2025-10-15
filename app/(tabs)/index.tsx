@@ -34,6 +34,24 @@ const HomeScreen: React.FC<Props> = () => {
         <Link className="w-100 p-2" href="/learn/07-image">
           Image
         </Link>
+        <Link className="w-100 p-2" href="/learn/08-textinput">
+          TextInput
+        </Link>
+        <Link className="w-100 p-2" href="/learn/09-touchable">
+          Touchable
+        </Link>
+        <Link className="w-100 p-2" href="/learn/10-scrollview">
+          ScrollView
+        </Link>
+        <Link className="w-100 p-2" href="/learn/11-sectionlist">
+          SectionList
+        </Link>
+        <Link className="w-100 p-2" href="/learn/12-flatlist">
+          FlatList
+        </Link>
+        <Link className="w-100 p-2" href="/learn/test/test">
+          test
+        </Link>
       </ScrollView>
     </View>
   );

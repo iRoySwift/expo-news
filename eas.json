@@ -7,11 +7,11 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "android": {
-        "image": "latest"
-      },
+      // "android": {
+      //   "image": "latest"
+      // },
       "ios": {
-        "image": "latest",
+        "image": "xcode-14.3.0",
         "simulator": true
       }
     },
