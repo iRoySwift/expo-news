@@ -11,7 +11,7 @@
       //   "image": "latest"
       // },
       "ios": {
-        "image": "xcode-14.3.0",
+        "image": "sdk-51",
         "simulator": true
       }
     },
