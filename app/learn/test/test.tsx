@@ -8,6 +8,8 @@ import {
   Dimensions,
   Button,
   Text,
+  PermissionsAndroid,
+  Platform,
 } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import { ThemedView } from "@/components/ThemedView";
@@ -18,6 +20,14 @@ import { Asset } from "expo-asset";
 import * as Sharing from "expo-sharing";
 // import Pdf from "react-native-pdf";
 import Voice from "@react-native-voice/voice";
+import RNFS from "react-native-fs";
+
+interface FileNode {
+  name: string;
+  path: string;
+  type: "file" | "folder";
+  children?: FileNode[];
+}
 
 interface Props {}
 const Index: React.FC<Props> = () => {
@@ -182,6 +192,71 @@ const Index: React.FC<Props> = () => {
     }
   };
 
+  async function requestStoragePermission() {
+    if (Platform.OS === "android") {
+      try {
+        if (Platform.Version >= 33) {
+          // Android 13+
+          const result = await PermissionsAndroid.requestMultiple([
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES,
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_VIDEO,
+            PermissionsAndroid.PERMISSIONS.READ_MEDIA_AUDIO,
+          ]);
+          return Object.values(result).every(v => v === "granted");
+        } else {
+          // Android 12及以下
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+          );
+          return granted === PermissionsAndroid.RESULTS.GRANTED;
+        }
+      } catch (err) {
+        console.warn(err);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  async function buildFileTree(path: string): Promise<FileNode[]> {
+    const items = await RNFS.readDir(path);
+    const tree: FileNode[] = [];
+
+    for (const item of items) {
+      if (item.isDirectory()) {
+        // 递归读取子目录
+        const children = await buildFileTree(item.path);
+        tree.push({
+          name: item.name,
+          path: item.path,
+          type: "folder",
+          children,
+        });
+      } else {
+        tree.push({
+          name: item.name,
+          path: item.path,
+          type: "file",
+        });
+      }
+    }
+
+    return tree;
+  }
+
+  async function loadFolderTree() {
+    const hasPermission = await requestStoragePermission();
+    if (!hasPermission) {
+      console.log("没有权限");
+      return;
+    }
+
+    const rootPath = RNFS.DownloadDirectoryPath + "/budui"; // 改成你目标目录
+    const tree = await buildFileTree(rootPath);
+    console.log("目录树：", JSON.stringify(tree, null, 2));
+    return tree;
+  }
+
   return (
     <ThemedView style={styles.container}>
       {/* hidden stack so expo-router has header config if needed */}
@@ -283,6 +358,13 @@ const Index: React.FC<Props> = () => {
               readDir("pdfs");
             }}>
             <ThemedText>文件目录</ThemedText>
+          </Pressable>
+          <Pressable
+            style={styles.tab}
+            onPress={() => {
+              loadFolderTree();
+            }}>
+            <ThemedText>目录树</ThemedText>
           </Pressable>
           <Pressable
             style={styles.tab}
